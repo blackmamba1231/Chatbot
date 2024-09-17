@@ -4,6 +4,15 @@ const paypal = require('@paypal/checkout-server-sdk');
 const { client } = require('../paypalClient');
 const { Account, Ticket}= require('../db');
 const { authmiddleware } = require('../middleware');
+const session = require('express-session');
+const Razorpay = require('razorpay');
+
+require('dotenv').config();
+const razorpayInstance = new Razorpay({
+    key_id: process.env.key_id,
+    key_secret: process.env.key_secret
+});
+
 function calculatePrice(basePrice, eventType,quantity) {
     const ticketpricing = {
         'Child': 0.8,
@@ -34,7 +43,14 @@ router.post("/create-pending", authmiddleware, async (req, res) => {
 
         const basePrice = 100; // Example base price
         const finalPrice = calculatePrice(basePrice, eventType, quantity, ticketType); // Apply event-based pricing
-
+        req.session.pendingTicket = {
+            visitorName,
+            visitDate,
+            ticketType,
+            quantity,
+            eventType,
+            finalPrice,
+        };
         const newTicket = new Ticket({
             visitorName,
             visitDate,
@@ -42,7 +58,7 @@ router.post("/create-pending", authmiddleware, async (req, res) => {
             quantity,
             account: accountId,
             eventType,
-            status: 'pending' // Add a status field to indicate pending
+            status: 'pending' 
         });
 
         // Optionally, store or use the finalPrice
@@ -54,71 +70,31 @@ router.post("/create-pending", authmiddleware, async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-router.post('/paypal/create-order', async (req, res) => {
+router.post('/razorpay/create-order', async (req, res) => {
     const { amount } = req.body;
 
-    const request = new paypal.orders.OrdersCreateRequest();
-    request.preferredPaymentMethod = 'PAYPAL';
-    request.requestBody({
-        intent: 'CAPTURE',
-        purchase_units: [{
-            amount: {
-                currency_code: 'USD',
-                value: amount
-            }
-        }]
-    });
+    const options = {
+        amount: amount * 100, // Amount in smallest currency unit (paise for INR)
+        currency: 'INR', // Change currency if needed
+        receipt: `receipt_${Date.now()}`,
+        payment_capture: 1 // Auto-capture payment
+    };
 
     try {
-        const order = await client().execute(request);
-        res.json({ id: order.result.id });
+        const order = await razorpayInstance.orders.create(options);
+        console.log("order created "+ order.id + " amount " + order.amount + " currency " + order.currency );
+        res.json({ id: order.id, amount: order.amount, currency: order.currency });
     } catch (error) {
-        console.error('Error creating PayPal order:', error);
-        res.status(500).send('Error creating PayPal order');
+        console.error('Error creating Razorpay order:', error);
+        res.status(500).send('Error creating Razorpay order');
     }
 });
 
-router.post('/paypal/capture-order', async (req, res) => {
-    const { orderId } = req.body;
 
-    const request = new paypal.orders.OrdersCaptureRequest(orderId);
-    request.requestBody({});
 
-    try {
-        const capture = await client().execute(request);
-        res.json(capture.result);
-    } catch (error) {
-        console.error('Error capturing PayPal order:', error);
-        res.status(500).send('Error capturing PayPal order');
-    }
-});
+
 // Add a webhook route in your backend
-router.post('/paypal/webhook', (req, res) => {
-    const { event_type, resource } = req.body;
 
-    if (event_type === 'PAYMENT.CAPTURE.COMPLETED') {
-        // Handle successful payment
-        const { id, amount } = resource;
-        
-        // Update ticket status in your database
-        Ticket.findOneAndUpdate({ _id: id }, { status: 'confirmed' }, (err, ticket) => {
-            if (err || !ticket) {
-                return res.status(404).send('Ticket not found');
-            }
-            res.send('Payment processed successfully');
-        });
-    } else if (event_type === 'PAYMENT.CAPTURE.DENIED') {
-        // Handle payment failure
-        const { id } = resource;
-
-        Ticket.findOneAndUpdate({ _id: id }, { status: 'failed' }, (err, ticket) => {
-            if (err || !ticket) {
-                return res.status(404).send('Ticket not found');
-            }
-            res.send('Payment failed');
-        });
-    }
-});
 router.get('/status/:orderId', async (req, res) => {
     const { orderId } = req.params;
     console.log("Fetching status for ticketid"+ orderId )
@@ -140,19 +116,19 @@ router.get('/status/:orderId', async (req, res) => {
     }
 });
 
-router.post('/confirm',authmiddleware, async (req, res) => {
+router.post('/confirm', async (req, res) => {
     const { ticketId } = req.body;
-
+    console.log("ticket id " + ticketId);
     if (!ticketId) {
         return res.status(400).json({ error: 'Ticket ID is required' });
     }
 
     try {
         // Find and update the ticket status to 'confirmed'
-        const updatedTicket = await Ticket.findByIdAndUpdate(
-            ticketId,
-            { status: 'confirmed' },
-            { new: true } // Return the updated document
+       
+        const updatedTicket = await Ticket.updateOne(
+            {_id: ticketId},
+            { status: 'confirmed' }
         );
 
         if (!updatedTicket) {
@@ -160,6 +136,7 @@ router.post('/confirm',authmiddleware, async (req, res) => {
         }
 
         res.status(200).json({ message: 'Ticket confirmed successfully', ticket: updatedTicket });
+        req.session.pendingTicket = null;
     } catch (error) {
         console.error('Error confirming ticket:', error);
         res.status(500).json({ error: 'Error confirming ticket' });

@@ -101,8 +101,8 @@ const ChatBot = () => {
   });
   const [step, setStep] = useState(0);
   const [price, setPrice] = useState(null);
-  const [payPalOrderId, setPayPalOrderId] = useState(null);
-
+  const [razorpayOrderId, setRazorpayOrderId] = useState(null);
+  
   useEffect(() => {
     if (step === 0) {
       setMessages([{ text: translations[language].hello, type: 'bot' }]);
@@ -132,117 +132,14 @@ const ChatBot = () => {
       return null;
     }
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    const userMessage = { text: input, type: 'user' };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
-    setInput('');
-    setIsLoading(true);
-    if(step === 1){
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: `${translations[language].niceToMeet} ${input}! ${translations[language].help} `, type: 'bot'}]);
-        setStep(2);
-    }
-    if(step === 2){
-        const response = await fetchNLPResponse(input);
-        console.log(response);
-        if(response.intent === 'ticket.booking'){
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            { text: response.answer, type: 'bot'}]);
-          setStep(3);
-        }else{
-          if(response.intent === 'None')
-            setMessages((prevMessages) => [
-              ...prevMessages,
-              { text: response.answer, type: 'bot'}]);
-          setStep(2);
-        }
-      }
-   
-    if (step === 3) {
-      setFormData((prevFormData) => ({ ...prevFormData, visitorName: input }));
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: translations[language].visitDate, type: 'bot' }
-      ]);
-      setStep(4);
-    }else if (step === 4) {
-      setFormData((prevFormData) => ({ ...prevFormData, visitDate: input }));
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: translations[language].ticketType, type: 'bot' }
-      ]);
-      
-      setStep(5);
-    } else if (step === 5) {
-      setFormData((prevFormData) => ({ ...prevFormData, ticketType: input }));
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: translations[language].quantity, type: 'bot' }
-      ]);
-      setStep(6);
-      
-    } else if (step === 6) {
-      setFormData((prevFormData) => ({ ...prevFormData, quantity: input }));
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: translations[language].eventType, type: 'bot' }
-      ]);
-      setStep(7);
-    } else if (step === 7) {
-      setFormData((prevFormData) => ({ ...prevFormData, eventType: input }));
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: translations[language].confirm, type: 'bot' }
-      ]);
-      setStep(8);
-    }else if (step === 8 && input.toLowerCase() === 'confirm') {
-      try {
-        const ticketResponse = await axios.post('http://localhost:3000/api/v1/ticket/create-pending', formData, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        console.log(ticketResponse.data.ticket._id);
-        setPrice(ticketResponse.data.price);
-        setPayPalOrderId(ticketResponse.data.ticket._id);
-
-        const orderResponse = await axios.post('http://localhost:3000/api/v1/ticket/paypal/create-order', {
-          amount: ticketResponse.data.price
-        });
-
-        window.open(`https://www.paypal.com/checkoutnow?token=${orderResponse.data.id}`, '_blank');
-
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { text: `${translations[language].success} Total price: $${ticketResponse.data.price}.`, type: 'bot' }
-        ]);
-        checkPaymentStatus();
-        setFormData({
-          visitorName: '',
-          visitDate: '',
-          ticketType: '',
-          quantity: '',
-          eventType: ''
-        });
-      } catch (error) {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { text: translations[language].error, type: 'bot' }
-        ]);
-      }
-    }
-
-    setIsLoading(false);
-  };
-  const checkPaymentStatus = async () => {
+  const checkPaymentStatus = async (razorpayOrderId) => {
     try {
-        const response = await axios.get(`http://localhost:3000/api/v1/ticket/status/?orderId=${payPalOrderId}`);
+        // Update the endpoint to use the Razorpay orderId instead of PayPal orderId
+        const response = await axios.get(`http://localhost:3000/api/v1/ticket/status/?orderId=${razorpayOrderId}`);
         const status = response.data.status;
-        console.log('Payment status:' +status);
-        if (status === 'confirmed') {
+        console.log('Payment status: ' + status);
+
+        if (status === 'captured') {
             setMessages((prevMessages) => [
                 ...prevMessages,
                 { text: 'Payment was successful! Your tickets have been booked.', type: 'bot' },
@@ -259,11 +156,168 @@ const ChatBot = () => {
 };
 
 useEffect(() => {
-    if (payPalOrderId) {
-        const interval = setInterval(checkPaymentStatus, 5000);
-        return () => clearInterval(interval); 
-    }
-}, [payPalOrderId]);
+  // Dynamically load the Razorpay script when the component mounts
+  const script = document.createElement('script');
+  script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+  script.async = true;
+  document.body.appendChild(script);
+
+  return () => {
+      // Clean up the script when the component unmounts
+      document.body.removeChild(script);
+  };
+}, []);
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!input.trim()) return;
+
+  const userMessage = { text: input, type: 'user' };
+  setMessages((prevMessages) => [...prevMessages, userMessage]);
+  setInput('');
+  setIsLoading(true);
+  
+  if (step === 1) {
+      setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: `${translations[language].niceToMeet} ${input}! ${translations[language].help} `, type: 'bot'}
+      ]);
+      setStep(2);
+  }
+
+  if (step === 2) {
+      const response = await fetchNLPResponse(input);
+      console.log(response);
+      if (response.intent === 'ticket.booking') {
+          setMessages((prevMessages) => [
+              ...prevMessages,
+              { text: response.answer, type: 'bot'}
+          ]);
+          setStep(3);
+      } else {
+          if (response.intent === 'None') {
+              setMessages((prevMessages) => [
+                  ...prevMessages,
+                  { text: response.answer, type: 'bot'}
+              ]);
+          }
+          setStep(2);
+      }
+  }
+ 
+  if (step === 3) {
+      setFormData((prevFormData) => ({ ...prevFormData, visitorName: input }));
+      setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: translations[language].visitDate, type: 'bot' }
+      ]);
+      setStep(4);
+  } else if (step === 4) {
+      setFormData((prevFormData) => ({ ...prevFormData, visitDate: input }));
+      setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: translations[language].ticketType, type: 'bot' }
+      ]);
+      setStep(5);
+  } else if (step === 5) {
+      setFormData((prevFormData) => ({ ...prevFormData, ticketType: input }));
+      setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: translations[language].quantity, type: 'bot' }
+      ]);
+      setStep(6);
+  } else if (step === 6) {
+      setFormData((prevFormData) => ({ ...prevFormData, quantity: input }));
+      setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: translations[language].eventType, type: 'bot' }
+      ]);
+      setStep(7);
+  } else if (step === 7) {
+      setFormData((prevFormData) => ({ ...prevFormData, eventType: input }));
+      setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: translations[language].confirm, type: 'bot' }
+      ]);
+      setStep(8);
+  } else if (step === 8 && input.toLowerCase() === 'confirm') {
+      try {
+          console.log(formData);
+          
+          const ticketResponse = await axios.post('http://localhost:3000/api/v1/ticket/create-pending', formData, {
+              headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          });
+          setPrice(ticketResponse.data.price);
+          setRazorpayOrderId(ticketResponse.data.ticket._id);
+          console.log(ticketResponse.data.price);
+          // Initiate Razorpay order creation
+          const orderResponse = await axios.post('http://localhost:3000/api/v1/ticket/razorpay/create-order', {
+              amount: ticketResponse.data.price
+          });
+
+          const options = {
+            key: 'rzp_test_VfxTNOWFmIqHO7', 
+            amount: orderResponse.data.amount,
+            currency: orderResponse.data.currency,
+            order_id: orderResponse.data.id,
+            name: 'Ticket bot',
+            description: 'Test Payment',
+            handler: async function (response) {
+                const ticket_id = ticketResponse.data.ticket._id;
+                console.log("ticket id " + ticket_id);
+                try{
+                     const result = await axios.post('http://localhost:3000/api/v1/ticket/confirm', {
+                         ticketId: ticket_id,
+                     })
+                  console.log("Ticket created successfully");
+                  
+                }catch{
+                    console.log("Ticket creation failed");
+                }
+            },
+            theme: {
+                color: "#F37254" // Razorpay's theme color for the checkout window
+            }
+        };
+        
+
+          const rzp1 = new window.Razorpay(options);
+          rzp1.open();
+
+          
+
+          setFormData({
+              visitorName: '',
+              visitDate: '',
+              ticketType: '',
+              quantity: '',
+              eventType: ''
+          });
+          
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { text: `Your ticket was successfully created. Please check you mail for ticket details`, type: 'bot' }
+        ]);
+      } catch (error) {
+          console.log(formData);
+          setMessages((prevMessages) => [
+              ...prevMessages,
+              { text: translations[language].error, type: 'bot' }
+          ]);
+      }
+  }
+
+  setIsLoading(false);
+};
+
+useEffect(() => {
+  if (razorpayOrderId) {
+      const interval = setInterval(checkPaymentStatus(razorpayOrderId), 5000);
+      return () => clearInterval(interval); 
+  }
+}, [razorpayOrderId]);
+
 
   return (
     <div className="flex flex-col h-[80vh] max-w-lg mx-auto border border-gray-300 rounded-lg overflow-hidden bg-gray-100">

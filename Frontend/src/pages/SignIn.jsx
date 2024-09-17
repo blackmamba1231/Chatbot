@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './SignIn.css'; // Optional CSS for styling
 import { BottomWarning } from '../components/BottomWarning';
+import VerifyOTP from '../components/VerifyOTP';
 const SignIn = () => {
     const [formData, setFormData] = useState({ username: '', password: '' });
     const [error, setError] = useState('');
@@ -19,7 +20,7 @@ const SignIn = () => {
             const response = await axios.post('http://localhost:3000/api/v1/user/signin', formData);
             if (response.data.success) {
                 localStorage.setItem('token', response.data.token);
-                navigate('/profile');
+                navigate('/chat');
             } else {
                 setError('Invalid username or password');
             }
@@ -58,6 +59,7 @@ const SignIn = () => {
                     Sign In
                 </button>
                 <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/signup"} />
+                <BottomWarning label={"Forgot Password?"} buttonText={"Forgot Password"} to={"/forgot"} />
             </form>
             
         </div>

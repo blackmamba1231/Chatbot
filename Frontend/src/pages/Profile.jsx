@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-'use client'
-import ChatBot from '../components/ChatBot';
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle, TransitionChild } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import ChatBot from '../components/ChatBot'; // Import ChatBot component
+import { Dialog, DialogPanel, DialogTitle, TransitionChild } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 import './Profile.css'; // CSS for styling the profile
 
@@ -13,10 +12,11 @@ const Profile = () => {
         firstName: '',
         lastName: '',
         username: '',
-        avatar: '' 
+        avatar: ''
     });
     const [editMode, setEditMode] = useState(false);
     const [message, setMessage] = useState('');
+    const [isChatBotOpen, setIsChatBotOpen] = useState(false); // State to control ChatBot visibility
     const navigate = useNavigate(); // useNavigate hook for navigation
 
     const fetchProfile = async () => {
@@ -56,11 +56,11 @@ const Profile = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token'); // Remove token from local storage
-        navigate('/signin'); // Redirect to login page
+        navigate('/'); // Redirect to login page
     };
 
     return (
-        
+        <div>
             <Dialog open={true} onClose={() => {}} className="relative z-10">
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" />
                 <div className="fixed inset-0 flex items-center justify-center p-4">
@@ -168,9 +168,7 @@ const Profile = () => {
                                     View Tickets
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        navigate('/chat');
-                                    }}
+                                    onClick={() => setIsChatBotOpen(true)} // Open ChatBot modal
                                     className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
                                 >
                                     ChatBot
@@ -180,6 +178,32 @@ const Profile = () => {
                     </DialogPanel>
                 </div>
             </Dialog>
+
+            {/* ChatBot Modal */}
+            {isChatBotOpen && (
+                <Dialog open={isChatBotOpen} onClose={() => setIsChatBotOpen(false)} className="relative z-10">
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" />
+                    <div className="fixed inset-0 flex items-center justify-center p-4">
+                        <DialogPanel className="relative w-full max-w-lg bg-white rounded-lg shadow-xl">
+                            <div className="flex justify-between items-center p-4 border-b">
+                                <h2 className="text-xl font-bold">ChatBot</h2>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsChatBotOpen(false)}
+                                    className="absolute top-4 right-4 p-1.5 rounded-md text-gray-300 hover:text-gray-900"
+                                >
+                                    <XMarkIcon className="h-6 w-6" />
+                                    <span className="sr-only">Close panel</span>
+                                </button>
+                            </div>
+                            <div className="p-4">
+                                <ChatBot /> {/* Embed ChatBot component */}
+                            </div>
+                        </DialogPanel>
+                    </div>
+                </Dialog>
+            )}
+        </div>
     );
 };
 

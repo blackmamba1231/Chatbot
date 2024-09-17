@@ -6,541 +6,629 @@
       "fr",
       "zh",
       "de"
-    ],
-    "tag": "nlp",
-    "threshold": 0.5,
-    "autoLoad": true,
-    "autoSave": true,
-    "modelFileName": "model.nlp",
-    "executeActionsBeforeAnswers": false,
-    "calculateSentiment": true
+    ]
   },
   "nluManager": {
-    "settings": {
-      "tag": "nlu-manager"
-    },
-    "locales": [
+    "settings": {},
+    "languages": [
       "en",
       "es",
       "fr",
       "zh",
       "de"
     ],
-    "languageNames": {},
+    "intentDomains": {},
     "domainManagers": {
       "en": {
         "settings": {
-          "locale": "en",
-          "trainByDomain": false,
-          "tag": "domain-manager-en",
-          "nluByDomain": {
-            "default": {
-              "className": "NeuralNlu",
-              "settings": {}
-            }
-          },
-          "useStemDict": true
+          "language": "en",
+          "useNoneFeature": true,
+          "config": {
+            "activation": "leaky-relu",
+            "hiddenLayers": [],
+            "iterations": 20000,
+            "learningRate": 0.7,
+            "errorThresh": 0.00005,
+            "momentum": 0.5,
+            "deltaErrorThresh": 0.000001,
+            "maxDecimals": 9,
+            "leakyReluAlpha": 0.08,
+            "timeout": 120000
+          }
         },
+        "language": "en",
+        "nluClassName": "BrainNLU",
+        "useMasterDomain": true,
+        "trainByDomain": false,
+        "keepStopwords": true,
         "stemDict": {
           "a,book,i,ticket,to,want": {
-            "intent": "ticket.booking",
-            "domain": "default"
-          },
-          "book,ticket": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "book": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
+          },
+          "book,ticket": {
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "a,book,ticket": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "ticket": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "book,help,i,need,with": {
-            "intent": "ticket.help",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.help"
           }
         },
         "intentDict": {
           "ticket.booking": "default",
           "ticket.help": "default"
         },
-        "sentences": [
-          {
-            "domain": "default",
-            "utterance": "I want to book a ticket",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "ticket booking",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "book",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "book ticket",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "book a ticket",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "ticket",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "I need help with booking",
-            "intent": "ticket.help"
-          }
-        ],
+        "useStemDict": true,
         "domains": {
           "master_domain": {
             "settings": {
-              "locale": "en",
-              "tag": "nlu-en",
-              "keepStopwords": true,
-              "nonefeatureValue": 1,
-              "nonedeltaMultiplier": 1.2,
-              "spellCheck": false,
-              "spellCheckDistance": 1,
-              "filterZeros": true,
-              "log": true
+              "language": "en",
+              "useNoneFeature": true,
+              "config": {
+                "activation": "leaky-relu",
+                "hiddenLayers": [],
+                "iterations": 20000,
+                "learningRate": 0.7,
+                "errorThresh": 0.00005,
+                "momentum": 0.5,
+                "deltaErrorThresh": 0.000001,
+                "maxDecimals": 9,
+                "leakyReluAlpha": 0.08,
+                "timeout": 120000
+              }
             },
+            "language": "en",
+            "keepStopwords": true,
+            "docs": [
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "i",
+                  "want",
+                  "to",
+                  "book",
+                  "a",
+                  "ticket"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "ticket",
+                  "book"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "book"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "book",
+                  "ticket"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "book",
+                  "a",
+                  "ticket"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "ticket"
+                ]
+              },
+              {
+                "intent": "ticket.help",
+                "tokens": [
+                  "i",
+                  "need",
+                  "help",
+                  "with",
+                  "book"
+                ]
+              }
+            ],
             "features": {
-              "i": 1,
+              "i": 2,
               "want": 1,
               "to": 1,
-              "book": 1,
-              "a": 1,
-              "ticket": 1,
+              "book": 6,
+              "a": 2,
+              "ticket": 5,
               "need": 1,
               "help": 1,
               "with": 1
             },
-            "intents": {
-              "ticket.booking": 1,
-              "ticket.help": 1
-            },
-            "intentFeatures": {
-              "ticket.booking": {
-                "i": 1,
-                "want": 1,
-                "to": 1,
-                "book": 1,
-                "a": 1,
-                "ticket": 1
-              },
-              "ticket.help": {
-                "i": 1,
-                "need": 1,
-                "help": 1,
-                "with": 1,
-                "book": 1
-              }
-            },
-            "featuresToIntent": {
-              "i": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "want": [
-                "ticket.booking"
-              ],
-              "to": [
-                "ticket.booking"
-              ],
-              "book": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "a": [
-                "ticket.booking"
-              ],
-              "ticket": [
-                "ticket.booking"
-              ],
-              "need": [
-                "ticket.help"
-              ],
-              "help": [
-                "ticket.help"
-              ],
-              "with": [
-                "ticket.help"
-              ]
-            },
-            "neuralNetwork": {
+            "isEditing": false,
+            "className": "BrainNLU",
+            "classifier": {
+              "className": "BrainClassifier",
               "settings": {
-                "locale": "en",
-                "tag": "nlu-en",
-                "keepStopwords": true,
-                "nonefeatureValue": 1,
-                "nonedeltaMultiplier": 1.2,
-                "spellCheck": false,
-                "spellCheckDistance": 1,
-                "filterZeros": true,
-                "log": true
+                "language": "en",
+                "useNoneFeature": true,
+                "config": {
+                  "activation": "leaky-relu",
+                  "hiddenLayers": [],
+                  "iterations": 20000,
+                  "learningRate": 0.7,
+                  "errorThresh": 0.00005,
+                  "momentum": 0.5,
+                  "deltaErrorThresh": 0.000001,
+                  "maxDecimals": 9,
+                  "leakyReluAlpha": 0.08,
+                  "timeout": 120000
+                }
               },
-              "features": [
-                "i",
-                "want",
-                "to",
-                "book",
-                "a",
-                "ticket",
-                "need",
-                "help",
-                "with"
-              ],
-              "intents": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "perceptrons": [
-                [
-                  -2.555461883544922,
-                  1.2806978225708008,
-                  1.2806978225708008,
-                  0.3457675576210022,
-                  -0.15058568120002747,
-                  0.3581784665584564,
-                  -3.8360791206359863,
-                  -3.8360791206359863,
-                  -3.8360791206359863,
-                  13.723765866337935
+              "labels": [],
+              "network": {
+                "sizes": [
+                  10,
+                  3
                 ],
-                [
-                  2.931654930114746,
-                  -0.8091027140617371,
-                  -0.8091027140617371,
-                  7.909105192993593e-7,
-                  -0.9229499697685242,
-                  -1.6148223876953125,
-                  3.7846856117248535,
-                  3.7846856117248535,
-                  3.7846856117248535,
-                  5.053730551766856e-7
-                ]
-              ]
+                "layers": [
+                  {
+                    "i": {},
+                    "want": {},
+                    "to": {},
+                    "book": {},
+                    "a": {},
+                    "ticket": {},
+                    "need": {},
+                    "help": {},
+                    "with": {},
+                    "nonefeature": {}
+                  },
+                  {
+                    "ticket.booking": {
+                      "bias": 11.866511078,
+                      "weights": {
+                        "i": -2.2303195,
+                        "want": 1.110111833,
+                        "to": 1.110111833,
+                        "book": 0.386004269,
+                        "a": -0.148842424,
+                        "ticket": 0.403538823,
+                        "need": -3.340427876,
+                        "help": -3.340427876,
+                        "with": -3.340427876,
+                        "nonefeature": -11.797746658
+                      }
+                    },
+                    "ticket.help": {
+                      "bias": -0.08127082,
+                      "weights": {
+                        "i": 2.60478878,
+                        "want": -0.693613291,
+                        "to": -0.693613291,
+                        "book": 0.081272677,
+                        "a": -0.727071583,
+                        "ticket": -1.254991531,
+                        "need": 3.298402548,
+                        "help": 3.298402548,
+                        "with": 3.298402548,
+                        "nonefeature": -0.243816823
+                      }
+                    },
+                    "None": {
+                      "bias": 2.604816135,
+                      "weights": {
+                        "i": -0.274485916,
+                        "want": -0.108018763,
+                        "to": -0.108018763,
+                        "book": -2.604814053,
+                        "a": -0.142332286,
+                        "ticket": -2.604813814,
+                        "need": -0.16646713,
+                        "help": -0.16646713,
+                        "with": -0.16646713,
+                        "nonefeature": 9.895179749
+                      }
+                    }
+                  }
+                ],
+                "trainOpts": {
+                  "iterations": 20000,
+                  "errorThresh": 0.00005,
+                  "fixedError": false,
+                  "deltaErrorThresh": 0.000001,
+                  "learningRate": 0.7,
+                  "momentum": 0.5,
+                  "leakyReluAlpha": 0.08,
+                  "maxDecimals": 9,
+                  "log": false
+                }
+              }
             }
           }
         }
       },
       "es": {
         "settings": {
-          "locale": "es",
-          "trainByDomain": false,
-          "tag": "domain-manager-es",
-          "nluByDomain": {
-            "default": {
-              "className": "NeuralNlu",
-              "settings": {}
-            }
-          },
-          "useStemDict": true
+          "language": "es",
+          "useNoneFeature": true,
+          "config": {
+            "activation": "leaky-relu",
+            "hiddenLayers": [],
+            "iterations": 20000,
+            "learningRate": 0.7,
+            "errorThresh": 0.00005,
+            "momentum": 0.5,
+            "deltaErrorThresh": 0.000001,
+            "maxDecimals": 9,
+            "leakyReluAlpha": 0.08,
+            "timeout": 120000
+          }
         },
+        "language": "es",
+        "nluClassName": "BrainNLU",
+        "useMasterDomain": true,
+        "trainByDomain": false,
+        "keepStopwords": true,
         "stemDict": {
           "entrad,quer,reserv,una": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "entrad,reserv": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "reserv": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "bolet,reserv": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "bolet": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "ayud,con,el,necesit,reserv": {
-            "intent": "ticket.help",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.help"
           }
         },
         "intentDict": {
           "ticket.booking": "default",
           "ticket.help": "default"
         },
-        "sentences": [
-          {
-            "domain": "default",
-            "utterance": "Quiero reservar una entrada",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "reservar entrada",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "reserva",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "reservar boleto",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "boletos",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "necesito ayuda con la reserva",
-            "intent": "ticket.help"
-          }
-        ],
+        "useStemDict": true,
         "domains": {
           "master_domain": {
             "settings": {
-              "locale": "es",
-              "tag": "nlu-es",
-              "keepStopwords": true,
-              "nonefeatureValue": 1,
-              "nonedeltaMultiplier": 1.2,
-              "spellCheck": false,
-              "spellCheckDistance": 1,
-              "filterZeros": true,
-              "log": true
+              "language": "es",
+              "useNoneFeature": true,
+              "config": {
+                "activation": "leaky-relu",
+                "hiddenLayers": [],
+                "iterations": 20000,
+                "learningRate": 0.7,
+                "errorThresh": 0.00005,
+                "momentum": 0.5,
+                "deltaErrorThresh": 0.000001,
+                "maxDecimals": 9,
+                "leakyReluAlpha": 0.08,
+                "timeout": 120000
+              }
             },
+            "language": "es",
+            "keepStopwords": true,
+            "docs": [
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "quer",
+                  "reserv",
+                  "una",
+                  "entrad"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "reserv",
+                  "entrad"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "reserv"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "reserv",
+                  "bolet"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "bolet"
+                ]
+              },
+              {
+                "intent": "ticket.help",
+                "tokens": [
+                  "necesit",
+                  "ayud",
+                  "con",
+                  "el",
+                  "reserv"
+                ]
+              }
+            ],
             "features": {
               "quer": 1,
-              "reserv": 1,
+              "reserv": 5,
               "una": 1,
-              "entrad": 1,
-              "bolet": 1,
+              "entrad": 2,
+              "bolet": 2,
               "necesit": 1,
               "ayud": 1,
               "con": 1,
               "el": 1
             },
-            "intents": {
-              "ticket.booking": 1,
-              "ticket.help": 1
-            },
-            "intentFeatures": {
-              "ticket.booking": {
-                "quer": 1,
-                "reserv": 1,
-                "una": 1,
-                "entrad": 1,
-                "bolet": 1
-              },
-              "ticket.help": {
-                "necesit": 1,
-                "ayud": 1,
-                "con": 1,
-                "el": 1,
-                "reserv": 1
-              }
-            },
-            "featuresToIntent": {
-              "quer": [
-                "ticket.booking"
-              ],
-              "reserv": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "una": [
-                "ticket.booking"
-              ],
-              "entrad": [
-                "ticket.booking"
-              ],
-              "bolet": [
-                "ticket.booking"
-              ],
-              "necesit": [
-                "ticket.help"
-              ],
-              "ayud": [
-                "ticket.help"
-              ],
-              "con": [
-                "ticket.help"
-              ],
-              "el": [
-                "ticket.help"
-              ]
-            },
-            "neuralNetwork": {
+            "isEditing": false,
+            "className": "BrainNLU",
+            "classifier": {
+              "className": "BrainClassifier",
               "settings": {
-                "locale": "es",
-                "tag": "nlu-es",
-                "keepStopwords": true,
-                "nonefeatureValue": 1,
-                "nonedeltaMultiplier": 1.2,
-                "spellCheck": false,
-                "spellCheckDistance": 1,
-                "filterZeros": true,
-                "log": true
+                "language": "es",
+                "useNoneFeature": true,
+                "config": {
+                  "activation": "leaky-relu",
+                  "hiddenLayers": [],
+                  "iterations": 20000,
+                  "learningRate": 0.7,
+                  "errorThresh": 0.00005,
+                  "momentum": 0.5,
+                  "deltaErrorThresh": 0.000001,
+                  "maxDecimals": 9,
+                  "leakyReluAlpha": 0.08,
+                  "timeout": 120000
+                }
               },
-              "features": [
-                "quer",
-                "reserv",
-                "una",
-                "entrad",
-                "bolet",
-                "necesit",
-                "ayud",
-                "con",
-                "el"
-              ],
-              "intents": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "perceptrons": [
-                [
-                  -0.018298717215657234,
-                  0.4366053640842438,
-                  -0.018298717215657234,
-                  0.27460482716560364,
-                  0.48423752188682556,
-                  -3.5108416080474854,
-                  -3.5108416080474854,
-                  -3.5108416080474854,
-                  -3.5108416080474854,
-                  13.609043882380764
+              "labels": [],
+              "network": {
+                "sizes": [
+                  10,
+                  3
                 ],
-                [
-                  -0.4083285331726074,
-                  0.022016756236553192,
-                  -0.4083285331726074,
-                  -1.0613785982131958,
-                  -0.754711925983429,
-                  3.571427822113037,
-                  3.571427822113037,
-                  3.571427822113037,
-                  3.571427822113037,
-                  -0.022015216105069485
-                ]
-              ]
+                "layers": [
+                  {
+                    "quer": {},
+                    "reserv": {},
+                    "una": {},
+                    "entrad": {},
+                    "bolet": {},
+                    "necesit": {},
+                    "ayud": {},
+                    "con": {},
+                    "el": {},
+                    "nonefeature": {}
+                  },
+                  {
+                    "ticket.booking": {
+                      "bias": 11.74182236,
+                      "weights": {
+                        "quer": -0.013979088,
+                        "reserv": 0.4878622,
+                        "una": -0.013979088,
+                        "entrad": 0.297077864,
+                        "bolet": 0.532720268,
+                        "necesit": -3.057898045,
+                        "ayud": -3.057898045,
+                        "con": -3.057898045,
+                        "el": -3.057898045,
+                        "nonefeature": -11.678233147
+                      }
+                    },
+                    "ticket.help": {
+                      "bias": -0.080477651,
+                      "weights": {
+                        "quer": -0.337308735,
+                        "reserv": 0.080479644,
+                        "una": -0.337308735,
+                        "entrad": -0.852245867,
+                        "bolet": -0.592358291,
+                        "necesit": 3.124999046,
+                        "ayud": 3.124999046,
+                        "con": 3.124999046,
+                        "el": 3.124999046,
+                        "nonefeature": -0.209448934
+                      }
+                    },
+                    "None": {
+                      "bias": 2.537793808,
+                      "weights": {
+                        "quer": -0.195362806,
+                        "reserv": -2.537791729,
+                        "una": -0.195362806,
+                        "entrad": -0.625597477,
+                        "bolet": -2.537791491,
+                        "necesit": -0.144109502,
+                        "ayud": -0.144109502,
+                        "con": -0.144109502,
+                        "el": -0.144109502,
+                        "nonefeature": 9.962202072
+                      }
+                    }
+                  }
+                ],
+                "trainOpts": {
+                  "iterations": 20000,
+                  "errorThresh": 0.00005,
+                  "fixedError": false,
+                  "deltaErrorThresh": 0.000001,
+                  "learningRate": 0.7,
+                  "momentum": 0.5,
+                  "leakyReluAlpha": 0.08,
+                  "maxDecimals": 9,
+                  "log": false
+                }
+              }
             }
           }
         }
       },
       "fr": {
         "settings": {
-          "locale": "fr",
-          "trainByDomain": false,
-          "tag": "domain-manager-fr",
-          "nluByDomain": {
-            "default": {
-              "className": "NeuralNlu",
-              "settings": {}
-            }
-          },
-          "useStemDict": true
+          "language": "fr",
+          "useNoneFeature": true,
+          "config": {
+            "activation": "leaky-relu",
+            "hiddenLayers": [],
+            "iterations": 20000,
+            "learningRate": 0.7,
+            "errorThresh": 0.00005,
+            "momentum": 0.5,
+            "deltaErrorThresh": 0.000001,
+            "maxDecimals": 9,
+            "leakyReluAlpha": 0.08,
+            "timeout": 120000
+          }
         },
+        "language": "fr",
+        "nluClassName": "BrainNLU",
+        "useMasterDomain": true,
+        "trainByDomain": false,
+        "keepStopwords": true,
         "stemDict": {
           "billet,je,reserv,un,veux": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "billet,de,reserv": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "reserv": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "billet,reserv,un": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "billet": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "ai,aid,besoin,d,j,la,pour,reserv": {
-            "intent": "ticket.help",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.help"
           }
         },
         "intentDict": {
           "ticket.booking": "default",
           "ticket.help": "default"
         },
-        "sentences": [
-          {
-            "domain": "default",
-            "utterance": "Je veux réserver un billet",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "réservation de billet",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "réserver",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "réserver un billet",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "billet",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "J'ai besoin d'aide pour la réservation",
-            "intent": "ticket.help"
-          }
-        ],
+        "useStemDict": true,
         "domains": {
           "master_domain": {
             "settings": {
-              "locale": "fr",
-              "tag": "nlu-fr",
-              "keepStopwords": true,
-              "nonefeatureValue": 1,
-              "nonedeltaMultiplier": 1.2,
-              "spellCheck": false,
-              "spellCheckDistance": 1,
-              "filterZeros": true,
-              "log": true
+              "language": "fr",
+              "useNoneFeature": true,
+              "config": {
+                "activation": "leaky-relu",
+                "hiddenLayers": [],
+                "iterations": 20000,
+                "learningRate": 0.7,
+                "errorThresh": 0.00005,
+                "momentum": 0.5,
+                "deltaErrorThresh": 0.000001,
+                "maxDecimals": 9,
+                "leakyReluAlpha": 0.08,
+                "timeout": 120000
+              }
             },
+            "language": "fr",
+            "keepStopwords": true,
+            "docs": [
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "je",
+                  "veux",
+                  "reserv",
+                  "un",
+                  "billet"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "reserv",
+                  "de",
+                  "billet"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "reserv"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "reserv",
+                  "un",
+                  "billet"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "billet"
+                ]
+              },
+              {
+                "intent": "ticket.help",
+                "tokens": [
+                  "j",
+                  "ai",
+                  "besoin",
+                  "d",
+                  "aid",
+                  "pour",
+                  "la",
+                  "reserv"
+                ]
+              }
+            ],
             "features": {
               "je": 1,
               "veux": 1,
-              "reserv": 1,
-              "un": 1,
-              "billet": 1,
+              "reserv": 5,
+              "un": 2,
+              "billet": 4,
               "de": 1,
               "j": 1,
               "ai": 1,
@@ -550,582 +638,568 @@
               "pour": 1,
               "la": 1
             },
-            "intents": {
-              "ticket.booking": 1,
-              "ticket.help": 1
-            },
-            "intentFeatures": {
-              "ticket.booking": {
-                "je": 1,
-                "veux": 1,
-                "reserv": 1,
-                "un": 1,
-                "billet": 1,
-                "de": 1
-              },
-              "ticket.help": {
-                "j": 1,
-                "ai": 1,
-                "besoin": 1,
-                "d": 1,
-                "aid": 1,
-                "pour": 1,
-                "la": 1,
-                "reserv": 1
-              }
-            },
-            "featuresToIntent": {
-              "je": [
-                "ticket.booking"
-              ],
-              "veux": [
-                "ticket.booking"
-              ],
-              "reserv": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "un": [
-                "ticket.booking"
-              ],
-              "billet": [
-                "ticket.booking"
-              ],
-              "de": [
-                "ticket.booking"
-              ],
-              "j": [
-                "ticket.help"
-              ],
-              "ai": [
-                "ticket.help"
-              ],
-              "besoin": [
-                "ticket.help"
-              ],
-              "d": [
-                "ticket.help"
-              ],
-              "aid": [
-                "ticket.help"
-              ],
-              "pour": [
-                "ticket.help"
-              ],
-              "la": [
-                "ticket.help"
-              ]
-            },
-            "neuralNetwork": {
+            "isEditing": false,
+            "className": "BrainNLU",
+            "classifier": {
+              "className": "BrainClassifier",
               "settings": {
-                "locale": "fr",
-                "tag": "nlu-fr",
-                "keepStopwords": true,
-                "nonefeatureValue": 1,
-                "nonedeltaMultiplier": 1.2,
-                "spellCheck": false,
-                "spellCheckDistance": 1,
-                "filterZeros": true,
-                "log": true
+                "language": "fr",
+                "useNoneFeature": true,
+                "config": {
+                  "activation": "leaky-relu",
+                  "hiddenLayers": [],
+                  "iterations": 20000,
+                  "learningRate": 0.7,
+                  "errorThresh": 0.00005,
+                  "momentum": 0.5,
+                  "deltaErrorThresh": 0.000001,
+                  "maxDecimals": 9,
+                  "leakyReluAlpha": 0.08,
+                  "timeout": 120000
+                }
               },
-              "features": [
-                "je",
-                "veux",
-                "reserv",
-                "un",
-                "billet",
-                "de",
-                "j",
-                "ai",
-                "besoin",
-                "d",
-                "aid",
-                "pour",
-                "la"
-              ],
-              "intents": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "perceptrons": [
-                [
-                  -0.08386179804801941,
-                  -0.08386179804801941,
-                  4.786577224731445,
-                  -4.46278715133667,
-                  4.8082475662231445,
-                  -4.5060272216796875,
-                  -2.010549783706665,
-                  -2.010549783706665,
-                  -2.010549783706665,
-                  -2.010549783706665,
-                  -2.010549783706665,
-                  -2.010549783706665,
-                  -2.010549783706665,
-                  9.290496925402515
+              "labels": [],
+              "network": {
+                "sizes": [
+                  14,
+                  3
                 ],
-                [
-                  -0.2102414220571518,
-                  -0.2102414220571518,
-                  0.0045088957995176315,
-                  -0.4806813597679138,
-                  -0.8739411234855652,
-                  -0.31156256794929504,
-                  2.0408124923706055,
-                  2.0408124923706055,
-                  2.0408124923706055,
-                  2.0408124923706055,
-                  2.0408124923706055,
-                  2.0408124923706055,
-                  2.0408124923706055,
-                  -0.0044838622304191975
-                ]
-              ]
+                "layers": [
+                  {
+                    "je": {},
+                    "veux": {},
+                    "reserv": {},
+                    "un": {},
+                    "billet": {},
+                    "de": {},
+                    "j": {},
+                    "ai": {},
+                    "besoin": {},
+                    "d": {},
+                    "aid": {},
+                    "pour": {},
+                    "la": {},
+                    "nonefeature": {}
+                  },
+                  {
+                    "ticket.booking": {
+                      "bias": 6.934185947,
+                      "weights": {
+                        "je": -0.075709641,
+                        "veux": -0.075709641,
+                        "reserv": 5.336076736,
+                        "un": -5.000290394,
+                        "billet": 5.357421398,
+                        "de": -5.025073051,
+                        "j": -1.753228068,
+                        "ai": -1.753228068,
+                        "besoin": -1.753228068,
+                        "d": -1.753228068,
+                        "aid": -1.753228068,
+                        "pour": -1.753228068,
+                        "la": -1.753228068,
+                        "nonefeature": -6.847884655
+                      }
+                    },
+                    "ticket.help": {
+                      "bias": -0.051907789,
+                      "weights": {
+                        "je": -0.214146689,
+                        "veux": -0.214146689,
+                        "reserv": 0.051914472,
+                        "un": -0.338947922,
+                        "billet": -0.612867534,
+                        "de": -0.273919582,
+                        "j": 1.785713196,
+                        "ai": 1.785713196,
+                        "besoin": 1.785713196,
+                        "d": 1.785713196,
+                        "aid": 1.785713196,
+                        "pour": 1.785713196,
+                        "la": 1.785713196,
+                        "nonefeature": -0.155730873
+                      }
+                    },
+                    "None": {
+                      "bias": 2.586278654,
+                      "weights": {
+                        "je": -0.139120191,
+                        "veux": -0.139120191,
+                        "reserv": -2.586181641,
+                        "un": -0.211370662,
+                        "billet": -2.586094379,
+                        "de": -0.21999006,
+                        "j": -0.127199292,
+                        "ai": -0.127199292,
+                        "besoin": -0.127199292,
+                        "d": -0.127199292,
+                        "aid": -0.127199292,
+                        "pour": -0.127199292,
+                        "la": -0.127199292,
+                        "nonefeature": 9.913462639
+                      }
+                    }
+                  }
+                ],
+                "trainOpts": {
+                  "iterations": 20000,
+                  "errorThresh": 0.00005,
+                  "fixedError": false,
+                  "deltaErrorThresh": 0.000001,
+                  "learningRate": 0.7,
+                  "momentum": 0.5,
+                  "leakyReluAlpha": 0.08,
+                  "maxDecimals": 9,
+                  "log": false
+                }
+              }
             }
           }
         }
       },
       "zh": {
         "settings": {
-          "locale": "zh",
-          "trainByDomain": false,
-          "tag": "domain-manager-zh",
-          "nluByDomain": {
-            "default": {
-              "className": "NeuralNlu",
-              "settings": {}
-            }
-          },
-          "useStemDict": true
+          "language": "zh",
+          "useNoneFeature": false,
+          "config": {
+            "activation": "leaky-relu",
+            "hiddenLayers": [],
+            "iterations": 20000,
+            "learningRate": 0.7,
+            "errorThresh": 0.00005,
+            "momentum": 0.5,
+            "deltaErrorThresh": 0.000001,
+            "maxDecimals": 9,
+            "leakyReluAlpha": 0.08,
+            "timeout": 120000
+          }
         },
+        "language": "zh",
+        "nluClassName": "BrainNLU",
+        "useMasterDomain": true,
+        "trainByDomain": false,
+        "keepStopwords": true,
         "stemDict": {
-          "ding4,piao4,wo3,xiang3,yi1,yu4,zhang1": {
-            "intent": "ticket.booking",
-            "domain": "default"
+          "一张,想,我,票,预订": {
+            "domain": "default",
+            "intent": "ticket.booking"
           },
-          "ding4,piao4,yu4": {
-            "intent": "ticket.booking",
-            "domain": "default"
+          "票,预订": {
+            "domain": "default",
+            "intent": "ticket.booking"
           },
-          "ding4,yu4": {
-            "intent": "ticket.booking",
-            "domain": "default"
+          "预订": {
+            "domain": "default",
+            "intent": "ticket.booking"
           },
-          "ding4,men2,piao4,yu4": {
-            "intent": "ticket.booking",
-            "domain": "default"
+          "门票,预订": {
+            "domain": "default",
+            "intent": "ticket.booking"
           },
-          "piao4": {
-            "intent": "ticket.booking",
-            "domain": "default"
+          "票": {
+            "domain": "default",
+            "intent": "ticket.booking"
           },
-          "bang1,ding4,wo3,xu1,yao4,yu4,zhu4": {
-            "intent": "ticket.help",
-            "domain": "default"
+          "帮助,我,需要,预订": {
+            "domain": "default",
+            "intent": "ticket.help"
           }
         },
         "intentDict": {
           "ticket.booking": "default",
           "ticket.help": "default"
         },
-        "sentences": [
-          {
-            "domain": "default",
-            "utterance": "我想预订一张票",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "预订票",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "预订",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "预订门票",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "票",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "我需要帮助预订",
-            "intent": "ticket.help"
-          }
-        ],
+        "useStemDict": true,
         "domains": {
           "master_domain": {
             "settings": {
-              "locale": "zh",
-              "tag": "nlu-zh",
-              "keepStopwords": true,
-              "nonefeatureValue": 1,
-              "nonedeltaMultiplier": 1.2,
-              "spellCheck": false,
-              "spellCheckDistance": 1,
-              "filterZeros": true,
-              "log": true
-            },
-            "features": {
-              "wo3": 1,
-              "xiang3": 1,
-              "yu4": 1,
-              "ding4": 1,
-              "yi1": 1,
-              "zhang1": 1,
-              "piao4": 1,
-              "men2": 1,
-              "xu1": 1,
-              "yao4": 1,
-              "bang1": 1,
-              "zhu4": 1
-            },
-            "intents": {
-              "ticket.booking": 1,
-              "ticket.help": 1
-            },
-            "intentFeatures": {
-              "ticket.booking": {
-                "wo3": 1,
-                "xiang3": 1,
-                "yu4": 1,
-                "ding4": 1,
-                "yi1": 1,
-                "zhang1": 1,
-                "piao4": 1,
-                "men2": 1
-              },
-              "ticket.help": {
-                "wo3": 1,
-                "xu1": 1,
-                "yao4": 1,
-                "bang1": 1,
-                "zhu4": 1,
-                "yu4": 1,
-                "ding4": 1
+              "language": "zh",
+              "useNoneFeature": false,
+              "config": {
+                "activation": "leaky-relu",
+                "hiddenLayers": [],
+                "iterations": 20000,
+                "learningRate": 0.7,
+                "errorThresh": 0.00005,
+                "momentum": 0.5,
+                "deltaErrorThresh": 0.000001,
+                "maxDecimals": 9,
+                "leakyReluAlpha": 0.08,
+                "timeout": 120000
               }
             },
-            "featuresToIntent": {
-              "wo3": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "xiang3": [
-                "ticket.booking"
-              ],
-              "yu4": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "ding4": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "yi1": [
-                "ticket.booking"
-              ],
-              "zhang1": [
-                "ticket.booking"
-              ],
-              "piao4": [
-                "ticket.booking"
-              ],
-              "men2": [
-                "ticket.booking"
-              ],
-              "xu1": [
-                "ticket.help"
-              ],
-              "yao4": [
-                "ticket.help"
-              ],
-              "bang1": [
-                "ticket.help"
-              ],
-              "zhu4": [
-                "ticket.help"
-              ]
-            },
-            "neuralNetwork": {
-              "settings": {
-                "locale": "zh",
-                "tag": "nlu-zh",
-                "keepStopwords": true,
-                "nonefeatureValue": 1,
-                "nonedeltaMultiplier": 1.2,
-                "spellCheck": false,
-                "spellCheckDistance": 1,
-                "filterZeros": true,
-                "log": true
-              },
-              "features": [
-                "wo3",
-                "xiang3",
-                "yu4",
-                "ding4",
-                "yi1",
-                "zhang1",
-                "piao4",
-                "men2",
-                "xu1",
-                "yao4",
-                "bang1",
-                "zhu4"
-              ],
-              "intents": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "perceptrons": [
-                [
-                  -2.283895254135132,
-                  0.6676815748214722,
-                  0.21917931735515594,
-                  0.21917931735515594,
-                  0.6676815748214722,
-                  0.6676815748214722,
-                  0.45861050486564636,
-                  -0.2880275249481201,
-                  -2.951866626739502,
-                  -2.951866626739502,
-                  -2.951866626739502,
-                  -2.951866626739502,
-                  13.659596845351945
-                ],
-                [
-                  2.2177734375,
-                  -0.7131665945053101,
-                  6.221253556759621e-7,
-                  6.221253556759621e-7,
-                  -0.7131665945053101,
-                  -0.7131665945053101,
-                  -1.5254267454147339,
-                  -0.20905329287052155,
-                  3.016984462738037,
-                  3.016984462738037,
-                  3.016984462738037,
-                  3.016984462738037,
-                  3.1279207541829276e-7
+            "language": "zh",
+            "keepStopwords": true,
+            "docs": [
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "我",
+                  "想",
+                  "预订",
+                  "一张",
+                  "票"
                 ]
-              ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "预订",
+                  "票"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "预订"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "预订",
+                  "门票"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "票"
+                ]
+              },
+              {
+                "intent": "ticket.help",
+                "tokens": [
+                  "我",
+                  "需要",
+                  "帮助",
+                  "预订"
+                ]
+              }
+            ],
+            "features": {
+              "我": 2,
+              "想": 1,
+              "预订": 5,
+              "一张": 1,
+              "票": 3,
+              "门票": 1,
+              "需要": 1,
+              "帮助": 1
+            },
+            "isEditing": false,
+            "className": "BrainNLU",
+            "classifier": {
+              "className": "BrainClassifier",
+              "settings": {
+                "language": "zh",
+                "useNoneFeature": false,
+                "config": {
+                  "activation": "leaky-relu",
+                  "hiddenLayers": [],
+                  "iterations": 20000,
+                  "learningRate": 0.7,
+                  "errorThresh": 0.00005,
+                  "momentum": 0.5,
+                  "deltaErrorThresh": 0.000001,
+                  "maxDecimals": 9,
+                  "leakyReluAlpha": 0.08,
+                  "timeout": 120000
+                }
+              },
+              "labels": [],
+              "network": {
+                "sizes": [
+                  8,
+                  2
+                ],
+                "layers": [
+                  {
+                    "我": {},
+                    "想": {},
+                    "预订": {},
+                    "一张": {},
+                    "票": {},
+                    "门票": {},
+                    "需要": {},
+                    "帮助": {}
+                  },
+                  {
+                    "ticket.booking": {
+                      "bias": 12.017332418,
+                      "weights": {
+                        "我": -3.133097172,
+                        "想": 1.465711236,
+                        "预订": 0.321299672,
+                        "一张": 1.465711236,
+                        "票": 0.352243006,
+                        "门票": 0.186956942,
+                        "需要": -4.598807335,
+                        "帮助": -4.598807335
+                      }
+                    },
+                    "ticket.help": {
+                      "bias": 6.69e-7,
+                      "weights": {
+                        "我": 3.415110111,
+                        "想": -1.127339959,
+                        "预订": 0.000001065,
+                        "一张": -1.127339959,
+                        "票": -1.543794274,
+                        "门票": -0.727450073,
+                        "需要": 4.542443275,
+                        "帮助": 4.542443275
+                      }
+                    }
+                  }
+                ],
+                "trainOpts": {
+                  "iterations": 20000,
+                  "errorThresh": 0.00005,
+                  "fixedError": false,
+                  "deltaErrorThresh": 0.000001,
+                  "learningRate": 0.7,
+                  "momentum": 0.5,
+                  "leakyReluAlpha": 0.08,
+                  "maxDecimals": 9,
+                  "log": false
+                }
+              }
             }
           }
         }
       },
       "de": {
         "settings": {
-          "locale": "de",
-          "trainByDomain": false,
-          "tag": "domain-manager-de",
-          "nluByDomain": {
-            "default": {
-              "className": "NeuralNlu",
-              "settings": {}
-            }
-          },
-          "useStemDict": true
+          "language": "de",
+          "useNoneFeature": true,
+          "config": {
+            "activation": "leaky-relu",
+            "hiddenLayers": [],
+            "iterations": 20000,
+            "learningRate": 0.7,
+            "errorThresh": 0.00005,
+            "momentum": 0.5,
+            "deltaErrorThresh": 0.000001,
+            "maxDecimals": 9,
+            "leakyReluAlpha": 0.08,
+            "timeout": 120000
+          }
         },
+        "language": "de",
+        "nluClassName": "BrainNLU",
+        "useMasterDomain": true,
+        "trainByDomain": false,
+        "keepStopwords": true,
         "stemDict": {
           "buch,ein,ich,mocht,ticket": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "buch,ticket": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "buch": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "ticket": {
-            "intent": "ticket.booking",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.booking"
           },
           "bei,brauch,buchung,der,hilf,ich": {
-            "intent": "ticket.help",
-            "domain": "default"
+            "domain": "default",
+            "intent": "ticket.help"
           }
         },
         "intentDict": {
           "ticket.booking": "default",
           "ticket.help": "default"
         },
-        "sentences": [
-          {
-            "domain": "default",
-            "utterance": "Ich möchte ein Ticket buchen",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "Ticket buchen",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "buchen",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "Ticket",
-            "intent": "ticket.booking"
-          },
-          {
-            "domain": "default",
-            "utterance": "Ich brauche Hilfe bei der Buchung",
-            "intent": "ticket.help"
-          }
-        ],
+        "useStemDict": true,
         "domains": {
           "master_domain": {
             "settings": {
-              "locale": "de",
-              "tag": "nlu-de",
-              "keepStopwords": true,
-              "nonefeatureValue": 1,
-              "nonedeltaMultiplier": 1.2,
-              "spellCheck": false,
-              "spellCheckDistance": 1,
-              "filterZeros": true,
-              "log": true
+              "language": "de",
+              "useNoneFeature": true,
+              "config": {
+                "activation": "leaky-relu",
+                "hiddenLayers": [],
+                "iterations": 20000,
+                "learningRate": 0.7,
+                "errorThresh": 0.00005,
+                "momentum": 0.5,
+                "deltaErrorThresh": 0.000001,
+                "maxDecimals": 9,
+                "leakyReluAlpha": 0.08,
+                "timeout": 120000
+              }
             },
+            "language": "de",
+            "keepStopwords": true,
+            "docs": [
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "ich",
+                  "mocht",
+                  "ein",
+                  "ticket",
+                  "buch"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "ticket",
+                  "buch"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "buch"
+                ]
+              },
+              {
+                "intent": "ticket.booking",
+                "tokens": [
+                  "ticket"
+                ]
+              },
+              {
+                "intent": "ticket.help",
+                "tokens": [
+                  "ich",
+                  "brauch",
+                  "hilf",
+                  "bei",
+                  "der",
+                  "buchung"
+                ]
+              }
+            ],
             "features": {
-              "ich": 1,
+              "ich": 2,
               "mocht": 1,
               "ein": 1,
-              "ticket": 1,
-              "buch": 1,
+              "ticket": 3,
+              "buch": 3,
               "brauch": 1,
               "hilf": 1,
               "bei": 1,
               "der": 1,
               "buchung": 1
             },
-            "intents": {
-              "ticket.booking": 1,
-              "ticket.help": 1
-            },
-            "intentFeatures": {
-              "ticket.booking": {
-                "ich": 1,
-                "mocht": 1,
-                "ein": 1,
-                "ticket": 1,
-                "buch": 1
-              },
-              "ticket.help": {
-                "ich": 1,
-                "brauch": 1,
-                "hilf": 1,
-                "bei": 1,
-                "der": 1,
-                "buchung": 1
-              }
-            },
-            "featuresToIntent": {
-              "ich": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "mocht": [
-                "ticket.booking"
-              ],
-              "ein": [
-                "ticket.booking"
-              ],
-              "ticket": [
-                "ticket.booking"
-              ],
-              "buch": [
-                "ticket.booking"
-              ],
-              "brauch": [
-                "ticket.help"
-              ],
-              "hilf": [
-                "ticket.help"
-              ],
-              "bei": [
-                "ticket.help"
-              ],
-              "der": [
-                "ticket.help"
-              ],
-              "buchung": [
-                "ticket.help"
-              ]
-            },
-            "neuralNetwork": {
+            "isEditing": false,
+            "className": "BrainNLU",
+            "classifier": {
+              "className": "BrainClassifier",
               "settings": {
-                "locale": "de",
-                "tag": "nlu-de",
-                "keepStopwords": true,
-                "nonefeatureValue": 1,
-                "nonedeltaMultiplier": 1.2,
-                "spellCheck": false,
-                "spellCheckDistance": 1,
-                "filterZeros": true,
-                "log": true
+                "language": "de",
+                "useNoneFeature": true,
+                "config": {
+                  "activation": "leaky-relu",
+                  "hiddenLayers": [],
+                  "iterations": 20000,
+                  "learningRate": 0.7,
+                  "errorThresh": 0.00005,
+                  "momentum": 0.5,
+                  "deltaErrorThresh": 0.000001,
+                  "maxDecimals": 9,
+                  "leakyReluAlpha": 0.08,
+                  "timeout": 120000
+                }
               },
-              "features": [
-                "ich",
-                "mocht",
-                "ein",
-                "ticket",
-                "buch",
-                "brauch",
-                "hilf",
-                "bei",
-                "der",
-                "buchung"
-              ],
-              "intents": [
-                "ticket.booking",
-                "ticket.help"
-              ],
-              "perceptrons": [
-                [
-                  -1.6847074031829834,
-                  0.7070733308792114,
-                  0.7070733308792114,
-                  0.44053003191947937,
-                  0.447529137134552,
-                  -2.3920907974243164,
-                  -2.3920907974243164,
-                  -2.3920907974243164,
-                  -2.3920907974243164,
-                  -2.3920907974243164,
-                  13.653959402426825
+              "labels": [],
+              "network": {
+                "sizes": [
+                  11,
+                  3
                 ],
-                [
-                  1.7468180656433105,
-                  -0.5670603513717651,
-                  -0.5670603513717651,
-                  -0.8076961636543274,
-                  -0.8127374053001404,
-                  2.3690402507781982,
-                  2.3690402507781982,
-                  2.3690402507781982,
-                  2.3690402507781982,
-                  2.3690402507781982,
-                  0.6936949661946971
-                ]
-              ]
+                "layers": [
+                  {
+                    "ich": {},
+                    "mocht": {},
+                    "ein": {},
+                    "ticket": {},
+                    "buch": {},
+                    "brauch": {},
+                    "hilf": {},
+                    "bei": {},
+                    "der": {},
+                    "buchung": {},
+                    "nonefeature": {}
+                  },
+                  {
+                    "ticket.booking": {
+                      "bias": 11.79638452,
+                      "weights": {
+                        "ich": -1.473584294,
+                        "mocht": 0.590161741,
+                        "ein": 0.590161741,
+                        "ticket": 0.489704847,
+                        "buch": 0.495154023,
+                        "brauch": -2.063743591,
+                        "hilf": -2.063743591,
+                        "bei": -2.063743591,
+                        "der": -2.063743591,
+                        "buchung": -2.063743591,
+                        "nonefeature": -11.738805771
+                      }
+                    },
+                    "ticket.help": {
+                      "bias": 0.471151242,
+                      "weights": {
+                        "ich": 1.61213696,
+                        "mocht": -0.471206069,
+                        "ein": -0.471206069,
+                        "ticket": -0.584840477,
+                        "buch": -0.597354293,
+                        "brauch": 2.083342314,
+                        "hilf": 2.083342314,
+                        "bei": 2.083342314,
+                        "der": 2.083342314,
+                        "buchung": 2.083342314,
+                        "nonefeature": -0.471149772
+                      }
+                    },
+                    "None": {
+                      "bias": 2.518655938,
+                      "weights": {
+                        "ich": -0.544008255,
+                        "mocht": -0.14908047,
+                        "ein": -0.14908047,
+                        "ticket": -2.518653631,
+                        "buch": -2.518653631,
+                        "brauch": -0.394929439,
+                        "hilf": -0.394929439,
+                        "bei": -0.394929439,
+                        "der": -0.394929439,
+                        "buchung": -0.394929439,
+                        "nonefeature": 9.981339455
+                      }
+                    }
+                  }
+                ],
+                "trainOpts": {
+                  "iterations": 20000,
+                  "errorThresh": 0.00005,
+                  "fixedError": false,
+                  "deltaErrorThresh": 0.000001,
+                  "learningRate": 0.7,
+                  "momentum": 0.5,
+                  "leakyReluAlpha": 0.08,
+                  "maxDecimals": 9,
+                  "log": false
+                }
+              }
             }
           }
         }
       }
     },
-    "intentDomains": {},
     "extraSentences": [
       [
         "en",
@@ -1249,86 +1323,92 @@
       ]
     ]
   },
-  "ner": {
-    "settings": {
-      "tag": "ner",
-      "entityPreffix": "%",
-      "entitySuffix": "%"
-    },
-    "rules": {}
+  "nerManager": {
+    "settings": {},
+    "threshold": 0.8,
+    "builtins": [
+      "Number",
+      "Ordinal",
+      "Percentage",
+      "Age",
+      "Currency",
+      "Dimension",
+      "Temperature",
+      "DateTime",
+      "PhoneNumber",
+      "IpAddress",
+      "Boolean",
+      "Email",
+      "Hashtag",
+      "URL"
+    ],
+    "namedEntities": {}
   },
-  "nlgManager": {
-    "settings": {
-      "tag": "nlg-manager"
+  "slotManager": {},
+  "responses": {
+    "en": {
+      "ticket.booking": [
+        {
+          "response": "Sure, I can help with booking your ticket. Please provide the visitor name"
+        }
+      ],
+      "ticket.help": [
+        {
+          "response": "What kind of help do you need with booking?"
+        }
+      ]
     },
-    "responses": {
-      "en": {
-        "ticket.booking": [
-          {
-            "answer": "Sure, I can help with booking your ticket. Please provide the visitor name"
-          }
-        ],
-        "ticket.help": [
-          {
-            "answer": "What kind of help do you need with booking?"
-          }
-        ]
-      },
-      "es": {
-        "ticket.booking": [
-          {
-            "answer": "Claro, puedo ayudarte a reservar tu entrada. Por favor, proporciona el nombre del visitante."
-          }
-        ],
-        "ticket.help": [
-          {
-            "answer": "¿Qué tipo de ayuda necesitas con la reserva?"
-          }
-        ]
-      },
-      "fr": {
-        "ticket.booking": [
-          {
-            "answer": "Bien sûr, je peux vous aider à réserver votre billet. Veuillez fournir le nom du visiteur."
-          }
-        ],
-        "ticket.help": [
-          {
-            "answer": "Quel type d'aide avez-vous besoin pour la réservation?"
-          }
-        ]
-      },
-      "zh": {
-        "ticket.booking": [
-          {
-            "answer": "好的，我可以帮您预订门票。请提供访客的姓名。"
-          }
-        ],
-        "ticket.help": [
-          {
-            "answer": "您需要什么预订帮助？"
-          }
-        ]
-      },
-      "de": {
-        "ticket.booking": [
-          {
-            "answer": "Sicher, ich kann Ihnen beim Buchen des Tickets helfen. Bitte geben Sie den Namen des Besuchers an."
-          }
-        ],
-        "ticket.help": [
-          {
-            "answer": "Welche Art von Hilfe benötigen Sie bei der Buchung?"
-          }
-        ]
-      }
+    "es": {
+      "ticket.booking": [
+        {
+          "response": "Claro, puedo ayudarte a reservar tu entrada. Por favor, proporciona el nombre del visitante."
+        }
+      ],
+      "ticket.help": [
+        {
+          "response": "¿Qué tipo de ayuda necesitas con la reserva?"
+        }
+      ]
+    },
+    "fr": {
+      "ticket.booking": [
+        {
+          "response": "Bien sûr, je peux vous aider à réserver votre billet. Veuillez fournir le nom du visiteur."
+        }
+      ],
+      "ticket.help": [
+        {
+          "response": "Quel type d'aide avez-vous besoin pour la réservation?"
+        }
+      ]
+    },
+    "zh": {
+      "ticket.booking": [
+        {
+          "response": "好的，我可以帮您预订门票。请提供访客的姓名。"
+        }
+      ],
+      "ticket.help": [
+        {
+          "response": "您需要什么预订帮助？"
+        }
+      ]
+    },
+    "de": {
+      "ticket.booking": [
+        {
+          "response": "Sicher, ich kann Ihnen beim Buchen des Tickets helfen. Bitte geben Sie den Namen des Besuchers an."
+        }
+      ],
+      "ticket.help": [
+        {
+          "response": "Welche Art von Hilfe benötigen Sie bei der Buchung?"
+        }
+      ]
     }
   },
-  "actionManager": {
-    "settings": {
-      "tag": "action-manager"
-    },
-    "actions": {}
-  },
-  "slotManager": {}
+  "actions": {},
+  "utteranceDict": {
+    "?": "help"
+  }
 }
