@@ -244,7 +244,7 @@ const handleSubmit = async (e) => {
   } else if (step === 8 && input.toLowerCase() === 'confirm') {
       try {
           console.log(formData);
-          
+          console.log(localStorage.getItem('token'));
           const ticketResponse = await axios.post('http://localhost:3000/api/v1/ticket/create-pending', formData, {
               headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
           });

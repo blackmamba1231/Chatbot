@@ -1,12 +1,25 @@
 const express = require('express');
+require('dotenv').config();
 const router = express.Router();
 const paypal = require('@paypal/checkout-server-sdk');
 const { client } = require('../paypalClient');
-const { Account, Ticket}= require('../db');
+const { Account, Ticket, User}= require('../db');
 const { authmiddleware } = require('../middleware');
 const session = require('express-session');
 const Razorpay = require('razorpay');
+const speakeasy = require('speakeasy');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
+
+// Nodemailer setup
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL, // Your email here
+        pass: process.env.EMAIL_PASSWORD // Your email password here
+    }
+});
 require('dotenv').config();
 const razorpayInstance = new Razorpay({
     key_id: process.env.key_id,
@@ -36,7 +49,7 @@ router.post("/create-pending", authmiddleware, async (req, res) => {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        const account = await Account.findOne({ userId: accountId });
+        const account = await User.findById(accountId);
         if (!account) {
             return res.status(404).json({ error: 'Account not found' });
         }
@@ -70,6 +83,7 @@ router.post("/create-pending", authmiddleware, async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
 router.post('/razorpay/create-order', async (req, res) => {
     const { amount } = req.body;
 
@@ -89,7 +103,6 @@ router.post('/razorpay/create-order', async (req, res) => {
         res.status(500).send('Error creating Razorpay order');
     }
 });
-
 
 
 
@@ -124,13 +137,51 @@ router.post('/confirm', async (req, res) => {
     }
 
     try {
-        // Find and update the ticket status to 'confirmed'
+        const ticketDetails = await Ticket.findById(ticketId);
+        const startDate = new Date(ticketDetails.visitDate).toISOString().replace(/-|:|\.\d\d\d/g, "");
+        const endDate = new Date(new Date(ticketDetails.visitDate).setHours(new Date(ticketDetails.visitDate).getHours() + 2)).toISOString().replace(/-|:|\.\d\d\d/g, "");
+        const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=Visit%20to%20${encodeURIComponent(ticketDetails.eventType)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(`Visit Date: ${ticketDetails.visitDate}, Ticket Type: ${ticketDetails.ticketType}, Quantity: ${ticketDetails.quantity}`)}&location=Your%20Event%20Location`;
+
+        
        
         const updatedTicket = await Ticket.updateOne(
             {_id: ticketId},
             { status: 'confirmed' }
         );
-
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: req.body.username,
+            subject: 'Your ticket has been Succesfully booked with Ticket id '+ ticketId,
+            html: `
+            <p>Ticket Details are:</p>
+            <ul>
+                <li>Visitor Name: ${ticketDetails.visitorName}</li>
+                <li>Visit Date: ${ticketDetails.visitDate}</li>
+                <li>Ticket Type: ${ticketDetails.ticketType}</li>
+                <li>Quantity: ${ticketDetails.quantity}</li>
+                <li>Event Type: ${ticketDetails.eventType}</li>
+            </ul>
+            <p>You can add this visit to your Google Calendar by clicking the button below:</p>
+            <a href="${calendarUrl}" style="text-decoration: none;">
+                <button style="padding: 10px 20px; background-color: #4285F4; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Add to Google Calendar
+                </button>
+            </a>
+        `
+        };
+    
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error("Error sending OTP:", error);
+                return res.status(500).json({ message: "Error sending OTP" });
+            } else {
+                return res.json({
+                    success: true,
+                    message: "OTP sent to your email. Please verify to complete signup."
+                });
+            }
+        });
+        
         if (!updatedTicket) {
             return res.status(404).json({ error: 'Ticket not found' });
         }
