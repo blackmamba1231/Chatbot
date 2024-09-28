@@ -7,7 +7,7 @@ const cluster = require('cluster');
 const os = require('os');
 const CPU = os.cpus().length;
 if(cluster.isPrimary){
-    for(let i = 0;i< CPU;i++){
+    for(let i = 0;i< 1;i++){
         cluster.fork();
     }
 }else{const app = express();
