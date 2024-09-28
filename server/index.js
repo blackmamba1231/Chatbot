@@ -7,7 +7,7 @@ const cluster = require('cluster');
 const os = require('os');
 const CPU = os.cpus().length;
 if(cluster.isPrimary){
-    for(let i = 0;i< CPU;i++){
+    for(let i = 0;i< 1;i++){
         cluster.fork();
     }
 }else{const app = express();
@@ -26,6 +26,11 @@ if(cluster.isPrimary){
     app.listen(process.env.PORT,()=> {
         console.log("server is running on port 3000")
     });
+    setInterval(() => {
+        const memoryUsage = process.memoryUsage();
+        console.log(`Memory Usage: RSS: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB, Heap Total: ${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB, Heap Used: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
+      }, 10000); // Logs memory usage every 10 seconds
+      
 }
 
 
