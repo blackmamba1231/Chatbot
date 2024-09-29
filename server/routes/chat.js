@@ -37,14 +37,7 @@ manager.addAnswer('fr', 'ticket.booking', 'Bien sûr, je peux vous aider à rés
 manager.addAnswer('fr', 'ticket.help', 'Quel type d\'aide avez-vous besoin pour la réservation?');
 
 // Chinese (Simplified) Queries and Responses
-manager.addDocument('zh', '我想预订一张票', 'ticket.booking');
-manager.addDocument('zh', '预订票', 'ticket.booking');
-manager.addDocument('zh', '预订', 'ticket.booking');
-manager.addDocument('zh', '预订门票', 'ticket.booking');
-manager.addDocument('zh', '票', 'ticket.booking');
-manager.addDocument('zh', '我需要帮助预订', 'ticket.help');
-manager.addAnswer('zh', 'ticket.booking', '好的，我可以帮您预订门票。请提供访客的姓名。');
-manager.addAnswer('zh', 'ticket.help', '您需要什么预订帮助？');
+
 
 // German (Deutsch) Queries and Responses
 manager.addDocument('de', 'Ich möchte ein Ticket buchen', 'ticket.booking');
