@@ -266,7 +266,7 @@ const handleSubmit = async (e) => {
             description: 'Test Payment',
             handler: async function (response) {
                 const ticket_id = ticketResponse.data.ticket._id;
-                const result = await axios.get('https://chatbot-frontend-smoky.vercel.app/api/v1/user/profile',{
+                const result = await axios.get('https://chatbot-api-seven-murex.vercel.app/api/v1/user/profile',{
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
                 })
                 console.log(result);
