@@ -51,7 +51,7 @@ manager.addAnswer('de', 'ticket.help', 'Welche Art von Hilfe benötigen Sie bei 
 
 (async () => {
   await manager.train();
-  manager.save();
+ 
 })();
 
 router.post('/chat', async (req, res) => {
