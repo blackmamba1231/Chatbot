@@ -8,7 +8,11 @@ const app = express();
 
 // Middleware setup
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE"], // Include all HTTP methods you'll use
+    credentials: true, // If you need to send cookies or authorization headers
+}));
 
 app.use(session({
     secret: process.env.SECRET, // Replace with a strong secret key from .env
