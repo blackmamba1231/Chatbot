@@ -6,35 +6,50 @@ const rootRouter = require("./routes/index");
 const cluster = require('cluster');
 const os = require('os');
 const CPU = os.cpus().length;
-if(cluster.isPrimary){
-    for(let i = 0;i< 1;i++){
+
+if (cluster.isPrimary) {
+    // Fork workers
+    for (let i = 0; i < CPU; i++) {
         cluster.fork();
     }
-}else{const app = express();
-    app.use(express.json());
-   app.use(cors());
-    app.use(session({
-       secret: process.env.secret, // Replace with a strong secret key
-       resave: false,
-       saveUninitialized: true,
-       cookie: { maxAge: 1000 * 60 * 60 } // 1 hour session duration
-   }));
-   
-    app.use("/api/v1",rootRouter);
-   
-   
-    app.listen(process.env.PORT,()=> {
-        console.log("server is running on port 3000")
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} exited. Forking a new one...`);
+        cluster.fork();
     });
+} else {
+    // Worker processes
+    const app = express();
+
+    // Middleware setup
+    app.use(express.json());
+    app.use(cors({
+        origin: ["https://chatbot-sigma-roan.vercel.app"], // Replace with your allowed origin
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true,
+    }));
+
+    app.use(session({
+        secret: process.env.SECRET, // Replace with a strong secret key from .env
+        resave: false,
+        saveUninitialized: true,
+        cookie: { maxAge: 1000 * 60 * 60 } // 1 hour session duration
+    }));
+
+    // Routes
+    app.use("/api/v1", rootRouter);
+
+    // Start the server
+    const PORT = process.env.PORT || 3000 + cluster.worker.id; // Use different port for each worker
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT} (Worker ${cluster.worker.id})`);
+    });
+
+    // Memory usage logging
     setInterval(() => {
         const memoryUsage = process.memoryUsage();
-        console.log(`Memory Usage: RSS: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB, Heap Total: ${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB, Heap Used: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
-      }, 10000); // Logs memory usage every 10 seconds
-      module.exports = app;
+        console.log(`Memory Usage (Worker ${cluster.worker.id}): RSS: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB, Heap Total: ${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB, Heap Used: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
+    }, 10000); // Logs memory usage every 10 seconds
+
+    module.exports = app; // Export only within the worker process
 }
- // If you are exporting an Express app
-
-
-
- 
- 
