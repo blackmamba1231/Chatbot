@@ -8,11 +8,7 @@ const app = express();
 
 // Middleware setup
 app.use(express.json());
-app.use(cors({
-    origin: ["https://chatbot-sigma-roan.vercel.app"], // Replace with your allowed origin
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-}));
+app.use(cors());
 
 app.use(session({
     secret: process.env.SECRET, // Replace with a strong secret key from .env
