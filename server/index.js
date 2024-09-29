@@ -9,7 +9,7 @@ const app = express();
 // Middleware setup
 app.use(express.json());
 app.use(cors({
-    origin: allowedOrigins,
+    origin: ["https://chatbot-sigma-roan.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"], // Include all HTTP methods you'll use
     credentials: true, // If you need to send cookies or authorization headers
 }));
