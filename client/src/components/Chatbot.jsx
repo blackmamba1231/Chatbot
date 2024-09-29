@@ -265,11 +265,21 @@ const handleSubmit = async (e) => {
             description: 'Test Payment',
             handler: async function (response) {
                 const ticket_id = ticketResponse.data.ticket._id;
+                const result = await axios.get('http://localhost:3000/api/v1/user/profile',{
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
+                })
+                console.log(result);
+                const username = result.data.username;
+                console.log(username);
                 console.log("ticket id " + ticket_id);
                 try{
                      const result = await axios.post('http://localhost:3000/api/v1/ticket/confirm', {
                          ticketId: ticket_id,
-                     })
+                         username: username
+                     },
+                    {
+                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
+                    })
                   console.log("Ticket created successfully");
                   
                 }catch{

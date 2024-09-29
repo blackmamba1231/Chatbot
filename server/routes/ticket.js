@@ -129,8 +129,9 @@ router.get('/status/:orderId', async (req, res) => {
     }
 });
 
-router.post('/confirm', async (req, res) => {
+router.post('/confirm', authmiddleware, async (req, res) => {
     const { ticketId } = req.body;
+    const username = req.body.username;
     console.log("ticket id " + ticketId);
     if (!ticketId) {
         return res.status(400).json({ error: 'Ticket ID is required' });
@@ -150,7 +151,7 @@ router.post('/confirm', async (req, res) => {
         );
         const mailOptions = {
             from: process.env.EMAIL,
-            to: req.body.username,
+            to: username,
             subject: 'Your ticket has been Succesfully booked with Ticket id '+ ticketId,
             html: `
             <p>Ticket Details are:</p>
