@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import TicketForm from './components/TicketForm';
 import TicketList from './components/TicketList';
-import ChatBot from './components/Chatbot';
+import ChatBot from './components/ChatBot';
 import TicketDetails from './components/TicketDetails';  // Ensure this is imported
 import VerifyOTP from './components/VerifyOTP';
 import ForgotPassword from './components/ForgotPassword';
