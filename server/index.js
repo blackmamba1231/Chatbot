@@ -32,6 +32,8 @@ if(cluster.isPrimary){
       }, 10000); // Logs memory usage every 10 seconds
       
 }
+module.exports = app; // If you are exporting an Express app
+
 
 
  
