@@ -256,7 +256,6 @@ const handleSubmit = async (e) => {
           const orderResponse = await axios.post('https://chatbot-api-seven-murex.vercel.app/api/v1/ticket/razorpay/create-order', {
               amount: ticketResponse.data.price
           });
-
           const options = {
             key: 'rzp_test_VfxTNOWFmIqHO7', 
             amount: orderResponse.data.amount,
