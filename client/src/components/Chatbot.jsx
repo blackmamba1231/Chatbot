@@ -126,7 +126,7 @@ const ChatBot = () => {
     } );
     
     try {
-      const response = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/bot/chat', {"message": message});
+      const response = await axios.post('https://chatbot-api-seven-murex.vercel.app/api/v1/bot/chat', {"message": message});
       return response.data;
     } catch (error) {
       console.error("Error fetching NLP response:", error);
@@ -136,7 +136,7 @@ const ChatBot = () => {
   const checkPaymentStatus = async (razorpayOrderId) => {
     try {
         // Update the endpoint to use the Razorpay orderId instead of PayPal orderId
-        const response = await axios.get(`https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/status/?orderId=${razorpayOrderId}`);
+        const response = await axios.get(`https://chatbot-api-seven-murex.vercel.app/api/v1/ticket/status/?orderId=${razorpayOrderId}`);
         const status = response.data.status;
         console.log('Payment status: ' + status);
 
@@ -246,14 +246,14 @@ const handleSubmit = async (e) => {
       try {
           console.log(formData);
           console.log(localStorage.getItem('token'));
-          const ticketResponse = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/create-pending', formData, {
+          const ticketResponse = await axios.post('https://chatbot-api-seven-murex.vercel.app/api/v1/ticket/create-pending', formData, {
               headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
           });
           setPrice(ticketResponse.data.price);
           setRazorpayOrderId(ticketResponse.data.ticket._id);
           console.log(ticketResponse.data.price);
           // Initiate Razorpay order creation
-          const orderResponse = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/razorpay/create-order', {
+          const orderResponse = await axios.post('https://chatbot-api-seven-murex.vercel.app/api/v1/ticket/razorpay/create-order', {
               amount: ticketResponse.data.price
           });
 
