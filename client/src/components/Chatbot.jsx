@@ -119,7 +119,6 @@ const ChatBot = () => {
     setMessages([{ text: translations[lang].hello, type: 'bot' }]); 
     setStep(1);
   };
-  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3000';
   const fetchNLPResponse = async (message) => {
     console.log( {
       "message": message
