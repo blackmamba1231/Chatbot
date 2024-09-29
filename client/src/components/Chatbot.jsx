@@ -119,13 +119,14 @@ const ChatBot = () => {
     setMessages([{ text: translations[lang].hello, type: 'bot' }]); 
     setStep(1);
   };
-  
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3000';
   const fetchNLPResponse = async (message) => {
     console.log( {
       "message": message
     } );
+    
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/bot/chat', {"message": message});
+      const response = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/bot/chat', {"message": message});
       return response.data;
     } catch (error) {
       console.error("Error fetching NLP response:", error);
@@ -135,7 +136,7 @@ const ChatBot = () => {
   const checkPaymentStatus = async (razorpayOrderId) => {
     try {
         // Update the endpoint to use the Razorpay orderId instead of PayPal orderId
-        const response = await axios.get(`http://localhost:3000/api/v1/ticket/status/?orderId=${razorpayOrderId}`);
+        const response = await axios.get(`https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/status/?orderId=${razorpayOrderId}`);
         const status = response.data.status;
         console.log('Payment status: ' + status);
 
@@ -245,14 +246,14 @@ const handleSubmit = async (e) => {
       try {
           console.log(formData);
           console.log(localStorage.getItem('token'));
-          const ticketResponse = await axios.post('http://localhost:3000/api/v1/ticket/create-pending', formData, {
+          const ticketResponse = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/create-pending', formData, {
               headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
           });
           setPrice(ticketResponse.data.price);
           setRazorpayOrderId(ticketResponse.data.ticket._id);
           console.log(ticketResponse.data.price);
           // Initiate Razorpay order creation
-          const orderResponse = await axios.post('http://localhost:3000/api/v1/ticket/razorpay/create-order', {
+          const orderResponse = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/razorpay/create-order', {
               amount: ticketResponse.data.price
           });
 
@@ -265,7 +266,7 @@ const handleSubmit = async (e) => {
             description: 'Test Payment',
             handler: async function (response) {
                 const ticket_id = ticketResponse.data.ticket._id;
-                const result = await axios.get('http://localhost:3000/api/v1/user/profile',{
+                const result = await axios.get('https://chatbot-frontend-smoky.vercel.app/api/v1/user/profile',{
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
                 })
                 console.log(result);
@@ -273,7 +274,7 @@ const handleSubmit = async (e) => {
                 console.log(username);
                 console.log("ticket id " + ticket_id);
                 try{
-                     const result = await axios.post('http://localhost:3000/api/v1/ticket/confirm', {
+                     const result = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/confirm', {
                          ticketId: ticket_id,
                          username: username
                      },

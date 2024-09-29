@@ -11,7 +11,7 @@ const VerifyOTP = () => {
         e.preventDefault();
         try {
             const username = localStorage.getItem('username');
-            const response = await axios.post('http://localhost:3000/api/v1/user/verify-otp', { username, otp });
+            const response = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/user/verify-otp', { username, otp });
             if (response.data.success) {
                 localStorage.setItem('token', response.data.token); // Save the JWT token
                 navigate('/chat'); // Redirect to the profile page

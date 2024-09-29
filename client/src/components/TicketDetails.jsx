@@ -12,7 +12,7 @@ const TicketDetails = () => {
     useEffect(() => {
         const fetchTicket = async () => {
             try {
-                const response = await axios.get(`/api/tickets/${id}`);
+                const response = await axios.get(`https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/${id}`);
                 setTicket(response.data);
             } catch (err) {
                 setError('Error loading ticket details');

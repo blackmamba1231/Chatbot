@@ -16,7 +16,7 @@ const ForgotPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/api/v1/user/forgot-password', { username });
+            const response = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/user/forgot-password', { username });
             if (response.data.success) {
                 setMessage('A password reset link has been sent to your email.');
                 setTimeout(() => navigate('/signin'), 5000); // Navigate to sign-in page after 5 seconds

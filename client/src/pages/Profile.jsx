@@ -21,7 +21,7 @@ const Profile = () => {
 
     const fetchProfile = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/v1/user/profile', {
+            const response = await axios.get('https://chatbot-frontend-smoky.vercel.app/api/v1/user/profile', {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
             setProfileData(response.data); // Update profile data with the fetched values
@@ -43,7 +43,7 @@ const Profile = () => {
         e.preventDefault();
         console.log("Profile Data being sent:", profileData);
         try {
-            await axios.put('http://localhost:3000/api/v1/user/', profileData, {
+            await axios.put('https://chatbot-frontend-smoky.vercel.app/api/v1/user/', profileData, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
             setMessage('Profile updated successfully');

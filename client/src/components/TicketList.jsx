@@ -10,7 +10,7 @@ const TicketList = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/v1/ticket/my-tickets', {
+                const response = await axios.get('https://your-vercel-project.vercel.app/api/v1/ticket/my-tickets', {
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
                 });
                 console.log('Fetched data:', response.data); // Debugging line

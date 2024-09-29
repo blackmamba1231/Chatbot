@@ -23,7 +23,7 @@ const TicketForm = () => {
         e.preventDefault();
         try {
             // 1. Create a pending ticket entry
-            const ticketResponse = await axios.post('http://localhost:3000/api/v1/ticket/create-pending', formData, {
+            const ticketResponse = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/create-pending', formData, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
 
@@ -31,7 +31,7 @@ const TicketForm = () => {
             setPayPalOrderId(ticketResponse.data._id); // Store the ticket ID for later use
 
             
-            const payPalResponse = await axios.post('http://localhost:3000/api/v1/ticket/paypal/create-order', {
+            const payPalResponse = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/paypal/create-order', {
                 amount: ticketResponse.data.price
             });
 
@@ -45,12 +45,12 @@ const TicketForm = () => {
     const handlePayPalCapture = async (orderId) => {
         try {
           
-            const captureResponse = await axios.post('http://localhost:3000/api/v1/ticket/paypal/capture-order', {
+            const captureResponse = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/paypal/capture-order', {
                 orderId
             });
 
             
-            await axios.post('http://localhost:3000/api/v1/ticket/confirm', {
+            await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/confirm', {
                 ticketId: payPalOrderId
             }, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
