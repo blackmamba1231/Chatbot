@@ -30,7 +30,7 @@ const ResetPassword = () => {
         }
            console.log(token)
         try {
-            const response = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/user/reset-password', {
+            const response = await axios.post('https://chatbot-api-seven-murex.vercel.app/api/v1/user/reset-password', {
                 token,
                 newPassword: password,
             });
