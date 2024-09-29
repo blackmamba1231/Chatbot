@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "build": "echo 'This is a Node API-only project, nothing to build.'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
