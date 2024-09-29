@@ -12,7 +12,11 @@ if(cluster.isPrimary){
     }
 }else{const app = express();
     app.use(express.json());
-    app.use(cors())
+    app.use(cors({
+    origin: ["https://chatbot-sigma-roan.vercel.app/"], // Allow only this origin
+    methods: ["POST", "GET", "PUT"], // Allowed HTTP methods
+    credentials: true // Allow credentials (e.g., cookies)
+}));
     app.use(session({
        secret: process.env.secret, // Replace with a strong secret key
        resave: false,
