@@ -22,7 +22,7 @@ const SignUp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/user/signup', formData);
+            const response = await axios.post('https://chatbot-api-seven-murex.vercel.app/api/v1/user/signup', formData);
             if (response.data.success) {
                 // Store the username in localStorage for OTP verification later
                 localStorage.setItem('username', formData.username);
