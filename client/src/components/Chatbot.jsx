@@ -274,7 +274,7 @@ const handleSubmit = async (e) => {
                 console.log(username);
                 console.log("ticket id " + ticket_id);
                 try{
-                     const result = await axios.post('https://chatbot-frontend-smoky.vercel.app/api/v1/ticket/confirm', {
+                     const result = await axios.post('https://chatbot-api-seven-murex.vercel.app/api/v1/ticket/confirm', {
                          ticketId: ticket_id,
                          username: username
                      },
