@@ -30,9 +30,9 @@ if(cluster.isPrimary){
         const memoryUsage = process.memoryUsage();
         console.log(`Memory Usage: RSS: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB, Heap Total: ${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB, Heap Used: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
       }, 10000); // Logs memory usage every 10 seconds
-      
+      module.exports = app;
 }
-module.exports = app; // If you are exporting an Express app
+ // If you are exporting an Express app
 
 
 
