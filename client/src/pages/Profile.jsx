@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import ChatBot from '../components/ChatBot'; // Import ChatBot component
+import ChatBot from '../components/Chatbot'; // Import ChatBot component
 import { Dialog, DialogPanel, DialogTitle, TransitionChild } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
