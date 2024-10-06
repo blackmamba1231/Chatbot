@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 const translations = {
   en: {
     hello: "Hello! What is your name?",
